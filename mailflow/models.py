@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.transaction import mark_for_rollback_on_error
 
 
 # Create your models here.
@@ -44,11 +43,7 @@ class NewsLetterRecipient(models.Model):
     )
 
     def __str__(self):
-        return self.email
-
-    @property
-    def full_name(self):
-        return f'{self.last_name} {self.first_name} {self.surname}'
+        return f'{self.last_name} {self.first_name} ( {self.email} )'
 
     class Meta:
         verbose_name = 'получатель'
@@ -65,7 +60,7 @@ class Message(models.Model):
         help_text='Введите тему письма',
     )
 
-    message = models.TextField(
+    body = models.TextField(
         verbose_name='Тело письма',
         help_text='Введите полное содержание письма'
     )
@@ -81,7 +76,7 @@ class Message(models.Model):
     class Meta:
         verbose_name = 'сообщение'
         verbose_name_plural = 'сообщения'
-        ordering = ['subject', ]
+        ordering = ['-created_at', ]
 
 
 class NewsLetter(models.Model):
@@ -114,7 +109,7 @@ class NewsLetter(models.Model):
     message = models.ForeignKey(
         Message,
         verbose_name='Сообщение',
-        help_text='Введите тему сообщения',
+        help_text='Выберите сообщение',
         on_delete=models.SET_NULL,
         related_name='newsletters',
         null=True,
@@ -153,7 +148,7 @@ class AttemptedMailing(models.Model):
     ]
 
     time_mail = models.DateTimeField(
-        auto_now=True,
+        auto_now_add=True,
         verbose_name='дата и время попытки отправки отправки'
     )
 
@@ -174,7 +169,7 @@ class AttemptedMailing(models.Model):
     newsletter = models.ForeignKey(
         NewsLetter,
         verbose_name='Рассылка',
-        help_text='Введите ключ рассылки',
+        help_text='Выберите рассылку',
         on_delete=models.SET_NULL,
         related_name='attempts',
         null=True,
@@ -185,6 +180,6 @@ class AttemptedMailing(models.Model):
         return f'{self.status} - {self.newsletter}'
 
     class Meta:
-        verbose_name = 'рассылка'
-        verbose_name_plural = 'рассылки'
+        verbose_name = 'попытка рассылки'
+        verbose_name_plural = 'попытки рассылки'
         ordering = ['-time_mail', 'status',]
