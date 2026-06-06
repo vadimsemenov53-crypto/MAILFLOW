@@ -11,7 +11,7 @@ class NewsLetterRecipientAdmin(admin.ModelAdmin):
 
     @admin.display(description="ФИО")
     def full_name(self, obj):
-        return f'{obj.full_name.last_name} {obj.full_name.first_name} {obj.full_name.surname}'
+        return obj.full_name
 
 
 @admin.register(Message)

@@ -45,6 +45,10 @@ class NewsLetterRecipient(models.Model):
     def __str__(self):
         return f'{self.last_name} {self.first_name} ( {self.email} )'
 
+    @property
+    def full_name(self):
+        return f'{self.last_name} {self.first_name} {self.surname}'
+
     class Meta:
         verbose_name = 'получатель'
         verbose_name_plural = 'получатели'

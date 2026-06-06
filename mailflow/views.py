@@ -7,4 +7,4 @@ from django.urls import reverse_lazy, reverse
 
 class RecipientListView(ListView):
     model = NewsLetterRecipient
-
+    template_name = 'mailflow/base.html'
