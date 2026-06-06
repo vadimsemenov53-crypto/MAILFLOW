@@ -6,5 +6,4 @@ from django.urls import reverse_lazy, reverse
 # Create your views here.
 
 class RecipientListView(ListView):
-    model = NewsLetterRecipient
-    template_name = 'mailflow/base.html'
+    model = NewsLetter
