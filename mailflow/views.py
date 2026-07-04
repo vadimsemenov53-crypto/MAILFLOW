@@ -5,5 +5,11 @@ from django.urls import reverse_lazy, reverse
 
 # Create your views here.
 
-class RecipientListView(ListView):
+class NewsLetterListView(ListView):
     model = NewsLetter
+
+
+class NewsLetterCreateView(CreateView):
+    model = NewsLetter
+    fields = ('time_start', 'time_stop', 'message', 'recipients',)
+    success_url = reverse_lazy('mailflow:mailings_list')

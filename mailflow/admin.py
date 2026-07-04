@@ -23,7 +23,7 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(NewsLetter)
 class NewsLetterAdmin(admin.ModelAdmin):
-    list_display = ('status', 'time_start', 'time_stop', 'created_at',)
+    list_display = ('name','status', 'time_start', 'time_stop', 'created_at',)
     list_filter = ('status', 'message', 'created_at',)
     search_fields = ('status', 'message__subject', 'message__body',)
     date_hierarchy = 'created_at'

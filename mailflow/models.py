@@ -95,6 +95,13 @@ class NewsLetter(models.Model):
         (ST_LAUNCHED, 'Запущена'),
     ]
 
+    name = models.CharField(
+        max_length=200,
+        verbose_name='Рассылка',
+        help_text='Введите название рассылки',
+        blank=True, null=True
+    )
+
     time_start = models.DateTimeField(
         verbose_name='дата и время первой отправки'
     )
