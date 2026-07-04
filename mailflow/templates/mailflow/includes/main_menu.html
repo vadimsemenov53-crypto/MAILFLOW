@@ -20,10 +20,12 @@
             <!-- Основное меню -->
             <ul class="navbar-nav nav-pills ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{% url 'mailflow:mailings_list' %}">Рассылки</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'mailings_list' %}active{% endif %} text-light"
+                       href="{% url 'mailflow:mailings_list' %}">Рассылки</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="#">Шаблоны сообщений</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'recipients_list' %}active{% endif %} text-light"
+                       href="{% url 'mailflow:recipients_list' %}">Шаблоны сообщений</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-light" href="#">Получатели</a>
