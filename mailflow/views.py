@@ -20,6 +20,9 @@ class NewsLetterCreateView(CreateView):
     )
     success_url = reverse_lazy("mailflow:mailings_list")
 
+class NewsLetterDetailView(DetailView):
+    model = NewsLetter
+
 
 class NewsLetterRecipientListView(ListView):
     model = NewsLetterRecipient

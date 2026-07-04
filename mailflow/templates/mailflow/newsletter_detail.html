@@ -1,0 +1,35 @@
+{% extends "mailflow/base.html" %}
+{% block content %}
+
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <p class="card-text">Название: {{ object.name }}</p>
+                    <p class="card-text">Статус: {{ object.status }}</p>
+                    <p class="card-text">Начало: {{ object.time_start }}</p>
+                    <p class="card-text">Конец: {{ object.time_stop }}</p>
+                    <p class="card-text">Сообщение: {{ object.message }}</p>
+                    <p class="card-text">Получатели:
+                        {% for recipient in object.recipients.all %}
+                        <li class="list-group-item">
+                            <small class="text-muted ms-2">(&nbsp;{{ recipient.email }}&nbsp;)</small>
+                        </li>
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">Дата создания: {{ object.created_at }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="{% url 'mailflow:mailings_list' %}" role="button">
+                                Назад
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

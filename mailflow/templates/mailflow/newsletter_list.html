@@ -18,7 +18,7 @@
                         <p class="card-text">Дата создания: {{ newsletter.created_at }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a class="btn btn-primary" href="#" role="button">
+                                <a class="btn btn-primary" href="{% url 'mailflow:mailings_detail' newsletter.pk %}" role="button">
                                     Посмотреть
                                 </a>
                                 <a class="btn btn-secondary" href="#" role="button">
