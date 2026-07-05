@@ -46,3 +46,15 @@ class NewsLetterDeleteView(DeleteView):
 
 class NewsLetterRecipientListView(ListView):
     model = NewsLetterRecipient
+
+
+class NewsLetterRecipientCreateView(CreateView):
+    model = NewsLetterRecipient
+    fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "surname",
+        "comment",
+    )
+    success_url = reverse_lazy("mailflow:recipients_list")
