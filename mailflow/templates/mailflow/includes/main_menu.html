@@ -2,6 +2,14 @@
     <div class="container">
         <a class="navbar-brand text-light" href="#">MAILFLOW</a>
 
+        {% if request.resolver_match.url_name == 'mailings_list' %}
+        <a class="nav-link text-light mx-2" href="{% url 'mailflow:mailings_create' %}">Добавить рассылку</a>
+        {% endif %}
+
+        {% if request.resolver_match.url_name == 'recipients_list' %}
+        <a class="nav-link text-light mx-2" href="#">Добавить сообщение</a>
+        {% endif %}
+
         <!-- Кнопка для мобильной версии -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#slidemenu"
                 aria-controls="slidemenu" aria-expanded="false" aria-label="Toggle navigation">

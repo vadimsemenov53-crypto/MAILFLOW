@@ -1,0 +1,26 @@
+{% extends "mailflow/base.html" %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <form class="row" method="post" enctype="multipart/form-data">
+                <div class="card">
+                    <p class="card-text">Вы действительно хотите удалить "{{object.name | truncatechars:30}}" ?</p>
+
+                    <div class="card-body">
+                        {% csrf_token %}
+                    </div>
+                    <button type="submit" class="mb-3 btn btn-danger">Удалить</button>
+                    <a class="mb-3 btn btn-secondary" href="{% url 'mailflow:mailings_list' %}" role="button">Назад</a>
+
+                </div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+{% endblock %}
