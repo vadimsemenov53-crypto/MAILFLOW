@@ -1,7 +1,7 @@
-from django.shortcuts import render
-from mailflow.models import NewsLetterRecipient, Message, NewsLetter, AttemptedMailing
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+
+from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
 
 # Create your views here.
 
@@ -21,8 +21,14 @@ class NewsLetterCreateView(CreateView):
     )
     success_url = reverse_lazy("mailflow:mailings_list")
 
+
 class NewsLetterDetailView(DetailView):
     model = NewsLetter
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        obj.update_status()
+        return obj
 
 
 class NewsLetterUpdateView(UpdateView):
@@ -36,7 +42,7 @@ class NewsLetterUpdateView(UpdateView):
     )
 
     def get_success_url(self):
-        return reverse('mailflow:mailings_detail', args=[self.kwargs.get('pk')])
+        return reverse("mailflow:mailings_detail", args=[self.kwargs.get("pk")])
 
 
 class NewsLetterDeleteView(DeleteView):
@@ -75,7 +81,7 @@ class NewsLetterRecipientUpdateView(UpdateView):
     )
 
     def get_success_url(self):
-        return reverse('mailflow:recipients_detail', args=[self.kwargs.get('pk')])
+        return reverse("mailflow:recipients_detail", args=[self.kwargs.get("pk")])
 
 
 class NewsLetterRecipientDeleteView(DeleteView):
@@ -108,7 +114,7 @@ class MessageUpdateView(UpdateView):
     )
 
     def get_success_url(self):
-        return reverse('mailflow:message_detail', args=[self.kwargs.get('pk')])
+        return reverse("mailflow:message_detail", args=[self.kwargs.get("pk")])
 
 
 class MessageDeleteView(DeleteView):

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 # Create your models here.
@@ -68,14 +69,14 @@ class Message(models.Model):
 class NewsLetter(models.Model):
     """Модель рассылка"""
 
-    ST_COMPLETED = "completed"
     ST_CREATED = "created"
     ST_LAUNCHED = "launched"
+    ST_COMPLETED = "completed"
 
     STATUS_LETTER_CHOICES = [
-        (ST_COMPLETED, "Завершена"),
         (ST_CREATED, "Cоздана"),
         (ST_LAUNCHED, "Запущена"),
+        (ST_COMPLETED, "Завершена"),
     ]
 
     name = models.CharField(
@@ -126,6 +127,24 @@ class NewsLetter(models.Model):
         ordering = [
             "-time_start",
         ]
+
+    def update_status(self):
+        now = timezone.now()
+
+        if now < self.time_start:
+            new_status = self.ST_CREATED
+
+        elif self.time_start <= now <= self.time_stop:
+            new_status = self.ST_LAUNCHED
+
+        else:
+            new_status = self.ST_COMPLETED
+
+        if self.status != new_status:
+            self.status = new_status
+            self.save(update_fields=["status"])
+
+
 
 
 class AttemptedMailing(models.Model):
