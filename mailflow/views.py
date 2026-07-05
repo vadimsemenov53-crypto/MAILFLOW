@@ -58,3 +58,21 @@ class NewsLetterRecipientCreateView(CreateView):
         "comment",
     )
     success_url = reverse_lazy("mailflow:recipients_list")
+
+
+class NewsLetterRecipientDetailView(DetailView):
+    model = NewsLetterRecipient
+
+
+class NewsLetterRecipientUpdateView(UpdateView):
+    model = NewsLetterRecipient
+    fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "surname",
+        "comment",
+    )
+
+    def get_success_url(self):
+        return reverse('mailflow:recipients_detail', args=[self.kwargs.get('pk')])
