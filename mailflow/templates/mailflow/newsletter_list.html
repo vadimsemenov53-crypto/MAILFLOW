@@ -21,7 +21,7 @@
                                 <a class="btn btn-primary" href="{% url 'mailflow:mailings_detail' newsletter.pk %}" role="button">
                                     Посмотреть
                                 </a>
-                                <a class="btn btn-secondary" href="#" role="button">
+                                <a class="btn btn-secondary" href="{% url 'mailflow:mailings_update' newsletter.pk %}" role="button">
                                     Редактировать
                                 </a>
                                 <a class="btn btn-danger" href="#" role="button">Удалить</a>

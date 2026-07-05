@@ -13,6 +13,7 @@ class NewsLetterListView(ListView):
 class NewsLetterCreateView(CreateView):
     model = NewsLetter
     fields = (
+        "name",
         "time_start",
         "time_stop",
         "message",
@@ -22,6 +23,25 @@ class NewsLetterCreateView(CreateView):
 
 class NewsLetterDetailView(DetailView):
     model = NewsLetter
+
+
+class NewsLetterUpdateView(UpdateView):
+    model = NewsLetter
+    fields = (
+        "name",
+        "time_start",
+        "time_stop",
+        "message",
+        "recipients",
+    )
+
+    def get_success_url(self):
+        return reverse('mailflow:mailings_detail', args=[self.kwargs.get('pk')])
+
+
+class NewsLetterDeleteView(DeleteView):
+    model = NewsLetter
+    success_url = reverse_lazy("mailflow:mailings_list")
 
 
 class NewsLetterRecipientListView(ListView):
