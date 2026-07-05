@@ -21,7 +21,7 @@
                                 <a class="btn btn-secondary" href="{% url 'mailflow:recipients_update' recipient.pk %}" role="button">
                                     Редактировать
                                 </a>
-                                <a class="btn btn-danger" href="#" role="button">Удалить</a>
+                                <a class="btn btn-danger" href="{% url 'mailflow:recipients_delete' recipient.pk %}" role="button">Удалить</a>
                             </div>
                         </div>
                     </div>
