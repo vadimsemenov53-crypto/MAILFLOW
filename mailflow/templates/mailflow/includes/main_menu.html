@@ -10,6 +10,10 @@
         <a class="nav-link text-light mx-2" href="{% url 'mailflow:recipients_create' %}">Добавить получателя</a>
         {% endif %}
 
+        {% if request.resolver_match.url_name == 'message_list' %}
+        <a class="nav-link text-light mx-2" href="{% url 'mailflow:message_create' %}">Добавить сообщение</a>
+        {% endif %}
+
         <!-- Кнопка для мобильной версии -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#slidemenu"
                 aria-controls="slidemenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +36,8 @@
                        href="{% url 'mailflow:mailings_list' %}">Рассылки</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="#">Шаблоны сообщений</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'message_list' %}active{% endif %} text-light"
+                       href="{% url 'mailflow:message_list' %}">Шаблоны сообщений</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'recipients_list' %}active{% endif %} text-light"

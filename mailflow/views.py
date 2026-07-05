@@ -81,3 +81,36 @@ class NewsLetterRecipientUpdateView(UpdateView):
 class NewsLetterRecipientDeleteView(DeleteView):
     model = NewsLetterRecipient
     success_url = reverse_lazy("mailflow:recipients_list")
+
+
+class MessageListView(ListView):
+    model = Message
+
+
+class MessageCreateView(CreateView):
+    model = Message
+    fields = (
+        "subject",
+        "body",
+    )
+    success_url = reverse_lazy("mailflow:message_list")
+
+
+class MessageDetailView(DetailView):
+    model = Message
+
+
+class MessageUpdateView(UpdateView):
+    model = Message
+    fields = (
+        "subject",
+        "body",
+    )
+
+    def get_success_url(self):
+        return reverse('mailflow:message_detail', args=[self.kwargs.get('pk')])
+
+
+class MessageDeleteView(DeleteView):
+    model = Message
+    success_url = reverse_lazy("mailflow:message_list")

@@ -10,7 +10,12 @@ from mailflow.views import (
     NewsLetterRecipientCreateView,
     NewsLetterRecipientDetailView,
     NewsLetterRecipientUpdateView,
-    NewsLetterRecipientDeleteView
+    NewsLetterRecipientDeleteView,
+    MessageListView,
+    MessageCreateView,
+    MessageDetailView,
+    MessageUpdateView,
+    MessageDeleteView
 )
 
 app_name = MailflowConfig.name
@@ -26,5 +31,11 @@ urlpatterns = [
     path('recipients/create/', NewsLetterRecipientCreateView.as_view(), name='recipients_create'),
     path('recipients/<int:pk>/', NewsLetterRecipientDetailView.as_view(), name='recipients_detail'),
     path('recipients/<int:pk>/update', NewsLetterRecipientUpdateView.as_view(), name='recipients_update'),
-    path('recipients/<int:pk>/delete', NewsLetterRecipientDeleteView.as_view(), name='recipients_delete')
+    path('recipients/<int:pk>/delete', NewsLetterRecipientDeleteView.as_view(), name='recipients_delete'),
+
+    path('message/', MessageListView.as_view(), name='message_list'),
+    path('message/create/', MessageCreateView.as_view(), name='message_create'),
+    path('message/<int:pk>/', MessageDetailView.as_view(), name='message_detail'),
+    path('message/<int:pk>/update', MessageUpdateView.as_view(), name='message_update'),
+    path('message/<int:pk>/delete', MessageDeleteView.as_view(), name='message_delete'),
 ]
