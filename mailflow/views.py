@@ -2,6 +2,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
+from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
 
 # Create your views here.
 
@@ -12,13 +13,7 @@ class NewsLetterListView(ListView):
 
 class NewsLetterCreateView(CreateView):
     model = NewsLetter
-    fields = (
-        "name",
-        "time_start",
-        "time_stop",
-        "message",
-        "recipients",
-    )
+    form_class = NewsLetterForm
     success_url = reverse_lazy("mailflow:mailings_list")
 
 
@@ -33,13 +28,7 @@ class NewsLetterDetailView(DetailView):
 
 class NewsLetterUpdateView(UpdateView):
     model = NewsLetter
-    fields = (
-        "name",
-        "time_start",
-        "time_stop",
-        "message",
-        "recipients",
-    )
+    form_class = NewsLetterForm
 
     def get_success_url(self):
         return reverse("mailflow:mailings_detail", args=[self.kwargs.get("pk")])
@@ -56,13 +45,7 @@ class NewsLetterRecipientListView(ListView):
 
 class NewsLetterRecipientCreateView(CreateView):
     model = NewsLetterRecipient
-    fields = (
-        "email",
-        "first_name",
-        "last_name",
-        "surname",
-        "comment",
-    )
+    form_class = NewsLetterRecipientForm
     success_url = reverse_lazy("mailflow:recipients_list")
 
 
@@ -72,13 +55,7 @@ class NewsLetterRecipientDetailView(DetailView):
 
 class NewsLetterRecipientUpdateView(UpdateView):
     model = NewsLetterRecipient
-    fields = (
-        "email",
-        "first_name",
-        "last_name",
-        "surname",
-        "comment",
-    )
+    form_class = NewsLetterRecipientForm
 
     def get_success_url(self):
         return reverse("mailflow:recipients_detail", args=[self.kwargs.get("pk")])
@@ -95,10 +72,7 @@ class MessageListView(ListView):
 
 class MessageCreateView(CreateView):
     model = Message
-    fields = (
-        "subject",
-        "body",
-    )
+    form_class = MessageForm
     success_url = reverse_lazy("mailflow:message_list")
 
 
@@ -108,10 +82,7 @@ class MessageDetailView(DetailView):
 
 class MessageUpdateView(UpdateView):
     model = Message
-    fields = (
-        "subject",
-        "body",
-    )
+    form_class = MessageForm
 
     def get_success_url(self):
         return reverse("mailflow:message_detail", args=[self.kwargs.get("pk")])
