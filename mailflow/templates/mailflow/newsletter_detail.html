@@ -26,6 +26,15 @@
                             </a>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+
+                        <form method="post" action="{% url 'mailflow:mailings_start' object.pk %}" class="form-floating">
+                            {% csrf_token %}
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">Запуск рассылки</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

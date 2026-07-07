@@ -3,21 +3,21 @@ from django.core.mail import send_mail
 from mailflow.models import NewsLetter
 from config.settings import EMAIL_HOST_USER
 
-def send_newsletter(newsletters):
+def send_newsletter(newsletter):
     """ Функция для реализации отправки рассылки по указанным адресам. """
-    newsletters.update_status()
+    newsletter.update_status()
 
-    if newsletters.status != NewsLetter.ST_LAUNCHED:
+    if newsletter.status != NewsLetter.ST_LAUNCHED:
         raise ValidationError('В данное время рассылка не может быть запущена.')
 
-    recipients = newsletters.recipients.all()
+    recipients = newsletter.recipients.all()
 
     for recipient in recipients:
         send_mail(
-            subject=newsletters.message.subject,
-            message=newsletters.message.body,
+            subject=newsletter.message.subject,
+            message=newsletter.message.body,
             from_email=EMAIL_HOST_USER,
-            recipient_list=[recipient]
+            recipient_list=[recipient.email]
         )
 
 

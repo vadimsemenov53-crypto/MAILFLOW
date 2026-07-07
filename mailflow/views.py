@@ -1,8 +1,11 @@
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
 from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
+
+from mailflow.services import send_newsletter
 
 # Create your views here.
 
@@ -37,6 +40,15 @@ class NewsLetterUpdateView(UpdateView):
 class NewsLetterDeleteView(DeleteView):
     model = NewsLetter
     success_url = reverse_lazy("mailflow:mailings_list")
+
+
+class NewsLetterStartView(View):
+
+    def post(self, request, pk):
+        newsletter = get_object_or_404(NewsLetter, pk=pk)
+        send_newsletter(newsletter)
+
+        return redirect('mailflow:mailings_detail', newsletter.pk)
 
 
 class NewsLetterRecipientListView(ListView):
