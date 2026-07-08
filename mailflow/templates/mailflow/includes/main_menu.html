@@ -43,8 +43,9 @@
                     <a class="nav-link {% if request.resolver_match.url_name == 'recipients_list' %}active{% endif %} text-light"
                        href="{% url 'mailflow:recipients_list' %}">Получатели</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="#">Мониторинг</a>
+                <li class="nav-item ">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'attempts_list' %}active{% endif %} text-light"
+                       href="{% url 'mailflow:attempts_list' %}">Мониторинг</a>
                 </li>
                 <!-- Выпадающее меню -->
                 <li class="nav-item dropdown">

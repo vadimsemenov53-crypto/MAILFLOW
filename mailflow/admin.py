@@ -31,7 +31,7 @@ class NewsLetterAdmin(admin.ModelAdmin):
 
 @admin.register(AttemptedMailing)
 class AttemptedMailingAdmin(admin.ModelAdmin):
-    list_display = ('status', 'time_mail', 'newsletter_status')
+    list_display = ('status', 'recipient', 'time_mail', 'newsletter_status')
     list_filter = ('status', 'time_mail',)
     search_fields = ('status', 'newsletter__message__subject', 'response_server',)
 

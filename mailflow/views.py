@@ -103,3 +103,16 @@ class MessageUpdateView(UpdateView):
 class MessageDeleteView(DeleteView):
     model = Message
     success_url = reverse_lazy("mailflow:message_list")
+
+
+class AttemptedMailingListView(ListView):
+    model = AttemptedMailing
+
+
+class AttemptedMailingDetailView(DetailView):
+    model = AttemptedMailing
+
+
+class AttemptedMailingDeleteView(DeleteView):
+    model = AttemptedMailing
+    success_url = reverse_lazy("mailflow:attempts_list")

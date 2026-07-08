@@ -7,7 +7,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <p class="card-text">Название: {{ object.name }}</p>
-                    <p class="card-text">Статус: {{ object.status }}</p>
+                    <p class="card-text">Статус: {{ object.get_status_display }}</p>
                     <p class="card-text">Начало: {{ object.time_start }}</p>
                     <p class="card-text">Конец: {{ object.time_stop }}</p>
                     <p class="card-text">Сообщение: {{ object.message }}</p>
