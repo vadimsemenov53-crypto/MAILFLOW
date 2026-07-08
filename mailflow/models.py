@@ -184,6 +184,15 @@ class AttemptedMailing(models.Model):
         blank=True,
     )
 
+    recipient = models.ForeignKey(
+        NewsLetterRecipient,
+        verbose_name="Получатель",
+        on_delete=models.SET_NULL,
+        related_name="attempts",
+        null=True,
+        blank=True,
+    )
+
     def __str__(self) -> str:
         """ Метод строкового представления 'AttemptedMailing' """
         return f"{self.status} - {self.newsletter}"
