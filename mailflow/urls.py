@@ -19,12 +19,15 @@ from mailflow.views import (
     NewsLetterStartView,
     AttemptedMailingListView,
     AttemptedMailingDetailView,
-    AttemptedMailingDeleteView
+    AttemptedMailingDeleteView,
+    MainView,
 )
 
 app_name = MailflowConfig.name
 
 urlpatterns = [
+    path('main/', MainView.as_view(), name='main_page'),
+
     path('mailings/', NewsLetterListView.as_view(), name='mailings_list'),
     path('mailings/create/', NewsLetterCreateView.as_view(), name='mailings_create'),
     path('mailings/<int:pk>/', NewsLetterDetailView.as_view(), name='mailings_detail'),

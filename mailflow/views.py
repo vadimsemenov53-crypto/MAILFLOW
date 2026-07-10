@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View, TemplateView
+from django.utils import timezone
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
 from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
@@ -8,6 +9,28 @@ from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
 from mailflow.services import send_newsletter
 
 # Create your views here.
+class MainView(TemplateView):
+    template_name = 'mailflow/main.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now()
+
+        context["total_mailings"] = NewsLetter.objects.count()
+
+        for newsletter in NewsLetter.objects.all():
+            newsletter.update_status()
+
+        context["active_mailings"] = NewsLetter.objects.filter(
+            time_start__lte=now,
+            time_stop__gte=now,
+            status=NewsLetter.ST_LAUNCHED
+        ).count()
+
+        context["total_recipients"] = NewsLetterRecipient.objects.count()
+
+        return context
+
 
 
 class NewsLetterListView(ListView):

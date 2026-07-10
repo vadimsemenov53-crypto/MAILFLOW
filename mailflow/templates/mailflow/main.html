@@ -1,0 +1,48 @@
+{% extends "mailflow/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h1>MAILFLOW</h1>
+    <h3>Добро пожаловать!</h3>
+    <h5>Наш сервис предоставляет большие возможности для организации рассылок и их мониторинга.</h5>
+    <h6>Просто войдите в систему, интуитивно понятный интерфейс все сам расскажет!</h6>
+
+    <div class="row mt-5">
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Всего рассылок</h5>
+                    <p>{{ total_mailings }}</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Активные рассылки</h5>
+                    <p>{{ active_mailings }}</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Получатели</h5>
+                    <p>{{ total_recipients }}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
