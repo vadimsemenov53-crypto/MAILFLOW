@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'mailflow',
     'users',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,5 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+AUTH_USER_MODEL = 'users.User'
