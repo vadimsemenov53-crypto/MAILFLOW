@@ -1,10 +1,10 @@
 <nav class="navbar navbar-expand-lg bg-dark" id="slide-nav" role="navigation">
     <div class="container">
         <ul class="navbar-nav nav-pills">
-                <li class="nav-item mx-2">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'main_page' %}active{% endif %} text-light"
-                       href="{% url 'mailflow:main_page' %}">MAILFLOW</a>
-                </li>
+            <li class="nav-item mx-2">
+                <a class="nav-link {% if request.resolver_match.url_name == 'main_page' %}active{% endif %} text-light"
+                   href="{% url 'mailflow:main_page' %}">MAILFLOW</a>
+            </li>
         </ul>
 
         <!-- Кнопка для мобильной версии -->
@@ -24,15 +24,15 @@
 
 
             {% if request.resolver_match.url_name == 'mailings_list' %}
-            <a class="nav-link text-light mx-5" href="{% url 'mailflow:mailings_create' %}">Добавить рассылку</a>
+            <a class="nav-link text-light mx-2" href="{% url 'mailflow:mailings_create' %}">Добавить рассылку</a>
             {% endif %}
 
             {% if request.resolver_match.url_name == 'recipients_list' %}
-            <a class="nav-link text-light mx-5" href="{% url 'mailflow:recipients_create' %}">Добавить получателя</a>
+            <a class="nav-link text-light mx-2" href="{% url 'mailflow:recipients_create' %}">Добавить получателя</a>
             {% endif %}
 
             {% if request.resolver_match.url_name == 'message_list' %}
-            <a class="nav-link text-light mx-5" href="{% url 'mailflow:message_create' %}">Добавить сообщение</a>
+            <a class="nav-link text-light mx-2" href="{% url 'mailflow:message_create' %}">Добавить сообщение</a>
             {% endif %}
 
             <!-- Основное меню -->
@@ -55,16 +55,30 @@
                 </li>
                 <!-- Выпадающее меню -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ещё
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Регистрация</a></li>
-                        <li><a class="dropdown-item" href="#">Техническая поддержка</a></li>
-                        <li><a class="dropdown-item" href="#">Связь</a></li>
-                    </ul>
+                    {% if user.is_authenticated %}
+                    <div class="p-2 btn btn-outline-primary dropdown mx-2">
+                        <p class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.email }}
+                        </p>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Профиль</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form method="post" action="{% url 'users:logout' %}" style="display: inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item btn-outline-primary">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'users:login' %}" class="p-2 btn btn-outline-primary mx-2">Вход</a>
+                    <a href="{% url 'users:register' %}" class="p-2 btn btn-outline-primary">Регистрация</a>
                 </li>
+
+                {% endif %}
             </ul>
         </div>
     </div>
