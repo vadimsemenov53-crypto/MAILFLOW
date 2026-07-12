@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View, TemplateView
 from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
 from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
@@ -37,10 +38,18 @@ class NewsLetterListView(ListView):
     model = NewsLetter
 
 
-class NewsLetterCreateView(CreateView):
+class NewsLetterCreateView(LoginRequiredMixin, CreateView):
     model = NewsLetter
     form_class = NewsLetterForm
     success_url = reverse_lazy("mailflow:mailings_list")
+
+    def form_valid(self, form):
+        newsletter = form.save()
+        user = self.request.user
+        newsletter.creator = user
+        newsletter.save()
+
+        return super().form_valid(form)
 
 
 class NewsLetterDetailView(DetailView):
@@ -52,7 +61,7 @@ class NewsLetterDetailView(DetailView):
         return obj
 
 
-class NewsLetterUpdateView(UpdateView):
+class NewsLetterUpdateView(LoginRequiredMixin, UpdateView):
     model = NewsLetter
     form_class = NewsLetterForm
 
@@ -60,12 +69,12 @@ class NewsLetterUpdateView(UpdateView):
         return reverse("mailflow:mailings_detail", args=[self.kwargs.get("pk")])
 
 
-class NewsLetterDeleteView(DeleteView):
+class NewsLetterDeleteView(LoginRequiredMixin, DeleteView):
     model = NewsLetter
     success_url = reverse_lazy("mailflow:mailings_list")
 
 
-class NewsLetterStartView(View):
+class NewsLetterStartView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
         newsletter = get_object_or_404(NewsLetter, pk=pk)
@@ -78,17 +87,25 @@ class NewsLetterRecipientListView(ListView):
     model = NewsLetterRecipient
 
 
-class NewsLetterRecipientCreateView(CreateView):
+class NewsLetterRecipientCreateView(LoginRequiredMixin, CreateView):
     model = NewsLetterRecipient
     form_class = NewsLetterRecipientForm
     success_url = reverse_lazy("mailflow:recipients_list")
+
+    def form_valid(self, form):
+        recipient = form.save()
+        user = self.request.user
+        recipient.creator = user
+        recipient.save()
+
+        return super().form_valid(form)
 
 
 class NewsLetterRecipientDetailView(DetailView):
     model = NewsLetterRecipient
 
 
-class NewsLetterRecipientUpdateView(UpdateView):
+class NewsLetterRecipientUpdateView(LoginRequiredMixin, UpdateView):
     model = NewsLetterRecipient
     form_class = NewsLetterRecipientForm
 
@@ -96,7 +113,7 @@ class NewsLetterRecipientUpdateView(UpdateView):
         return reverse("mailflow:recipients_detail", args=[self.kwargs.get("pk")])
 
 
-class NewsLetterRecipientDeleteView(DeleteView):
+class NewsLetterRecipientDeleteView(LoginRequiredMixin, DeleteView):
     model = NewsLetterRecipient
     success_url = reverse_lazy("mailflow:recipients_list")
 
@@ -105,17 +122,25 @@ class MessageListView(ListView):
     model = Message
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy("mailflow:message_list")
+
+    def form_valid(self, form):
+        message = form.save()
+        user = self.request.user
+        message.creator = user
+        message.save()
+
+        return super().form_valid(form)
 
 
 class MessageDetailView(DetailView):
     model = Message
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
 
@@ -123,7 +148,7 @@ class MessageUpdateView(UpdateView):
         return reverse("mailflow:message_detail", args=[self.kwargs.get("pk")])
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(LoginRequiredMixin, DeleteView):
     model = Message
     success_url = reverse_lazy("mailflow:message_list")
 
