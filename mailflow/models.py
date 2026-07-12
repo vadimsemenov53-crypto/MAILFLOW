@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.db import models
+from users.models import User
 
 # Create your models here.
 
@@ -23,6 +24,15 @@ class NewsLetterRecipient(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    creator = models.ForeignKey(
+        User,
+        verbose_name='Создатель',
+        help_text='Укажите Создателя продукта',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
 
     def __str__(self) -> str:
         """ Метод строкового представления 'NewsLetterRecipient' """
@@ -53,6 +63,15 @@ class Message(models.Model):
     body = models.TextField(verbose_name="Тело письма", help_text="Введите полное содержание письма")
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    creator = models.ForeignKey(
+        User,
+        verbose_name='Создатель',
+        help_text='Укажите Создателя продукта',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
 
     def __str__(self) -> models.CharField:
         """ Метод строкового представления 'Message' """
@@ -117,6 +136,15 @@ class NewsLetter(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
+    creator = models.ForeignKey(
+        User,
+        verbose_name='Создатель',
+        help_text='Укажите Создателя продукта',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+
     def __str__(self) -> str:
         """ Метод строкового представления 'NewsLetter' """
         return f"{self.status} - {self.message}"
@@ -143,8 +171,6 @@ class NewsLetter(models.Model):
         if self.status != new_status:
             self.status = new_status
             self.save(update_fields=["status"])
-
-
 
 
 class AttemptedMailing(models.Model):
