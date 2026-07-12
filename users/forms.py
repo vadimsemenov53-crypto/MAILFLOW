@@ -1,5 +1,5 @@
 from mailflow.forms import StyleFromMixin
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from .models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import ModelForm
@@ -19,3 +19,7 @@ class UserProfileForm(StyleFromMixin, ModelForm):
     class Meta:
         model = User
         fields = ('avatar', 'first_name', 'last_name', 'country', 'phone')
+
+
+class UserPasswordResetConfirmForm(StyleFromMixin, SetPasswordForm):
+    pass
