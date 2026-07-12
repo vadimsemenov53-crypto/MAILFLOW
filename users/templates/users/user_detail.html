@@ -1,0 +1,29 @@
+{% extends "mailflow/base.html" %}
+{% load users_tags %}
+{% block content %}
+
+
+<div class="container">
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" class="img-fluid">
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">Почта: {{ user.email }}</h4>
+                    <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <p class="card-text">Cтрана: {{ user.country }}</p>
+                    <p class="card-text">Телефон: {{ user.phone }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <a class="btn btn-outline-primary" href="{% url 'users:update' %}" role="button">Редактировать профиль</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

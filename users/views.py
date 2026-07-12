@@ -1,15 +1,16 @@
 import secrets
 
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, UpdateView
 from .models import User
 from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from config.settings import EMAIL_HOST_USER
 
 from django.contrib.auth.views import LoginView
-from users.forms import UserLoginForm, UserRegisterForm
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 
 
 # Create your views here.
@@ -49,10 +50,29 @@ def email_verification(request, token):
     user.save()
 
     send_mail(
-        subject='MAILFLOW. \n Добро пожаловать в наш сервис!',
+        subject='MAILFLOW. Добро пожаловать в наш сервис!',
         message='Спасибо за регистрацию! Теперь вам доступны все наши возможности отправки рассылок, писем.',
         from_email=EMAIL_HOST_USER,
         recipient_list=[user.email]
     )
 
     return redirect(reverse('users:login'))
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'users/user_detail.html'
+
+    def get_object(self):
+        return self.request.user
+
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserProfileForm
+
+    def get_object(self):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('users:detail')

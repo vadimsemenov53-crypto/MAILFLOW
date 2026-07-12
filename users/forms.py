@@ -2,6 +2,7 @@ from mailflow.forms import StyleFromMixin
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.forms import ModelForm
 
 
 class UserRegisterForm(StyleFromMixin, UserCreationForm):
@@ -12,3 +13,9 @@ class UserRegisterForm(StyleFromMixin, UserCreationForm):
 
 class UserLoginForm(StyleFromMixin, AuthenticationForm):
     pass
+
+
+class UserProfileForm(StyleFromMixin, ModelForm):
+    class Meta:
+        model = User
+        fields = ('avatar', 'first_name', 'last_name', 'country', 'phone')
