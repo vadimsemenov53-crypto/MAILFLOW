@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View, TemplateView
-from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
@@ -15,20 +14,29 @@ class MainView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        now = timezone.now()
 
-        context["total_mailings"] = NewsLetter.objects.count()
+        if not self.request.user.is_authenticated:
+            context["total_mailings"] = 0
+            context["active_mailings"] = 0
+            context["total_recipients"] = 0
+            return context
 
-        for newsletter in NewsLetter.objects.all():
+        user = self.request.user
+        newsletters = NewsLetter.objects.filter(creator=user)
+
+        context["total_mailings"] = newsletters.count()
+
+        for newsletter in newsletters:
             newsletter.update_status()
 
-        context["active_mailings"] = NewsLetter.objects.filter(
-            time_start__lte=now,
-            time_stop__gte=now,
-            status=NewsLetter.ST_LAUNCHED
+        context["active_mailings"] = AttemptedMailing.objects.filter(
+            newsletter__creator=user,
+            status=AttemptedMailing.ST_SUCCESS
         ).count()
 
-        context["total_recipients"] = NewsLetterRecipient.objects.count()
+        context["total_recipients"] = NewsLetterRecipient.objects.filter(
+            creator=user,
+        ).count()
 
         return context
 
@@ -36,6 +44,9 @@ class MainView(TemplateView):
 
 class NewsLetterListView(ListView):
     model = NewsLetter
+
+    def get_queryset(self):
+        return NewsLetter.objects.filter(creator=self.request.user)
 
 
 class NewsLetterCreateView(LoginRequiredMixin, CreateView):
@@ -86,6 +97,9 @@ class NewsLetterStartView(LoginRequiredMixin, View):
 class NewsLetterRecipientListView(ListView):
     model = NewsLetterRecipient
 
+    def get_queryset(self):
+        return NewsLetterRecipient.objects.filter(creator=self.request.user)
+
 
 class NewsLetterRecipientCreateView(LoginRequiredMixin, CreateView):
     model = NewsLetterRecipient
@@ -121,6 +135,9 @@ class NewsLetterRecipientDeleteView(LoginRequiredMixin, DeleteView):
 class MessageListView(ListView):
     model = Message
 
+    def get_queryset(self):
+        return Message.objects.filter(creator=self.request.user)
+
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
@@ -153,14 +170,17 @@ class MessageDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("mailflow:message_list")
 
 
-class AttemptedMailingListView(ListView):
+class AttemptedMailingListView(LoginRequiredMixin, ListView):
+    model = AttemptedMailing
+
+    def get_queryset(self):
+        return AttemptedMailing.objects.filter(newsletter__creator=self.request.user)
+
+
+class AttemptedMailingDetailView(LoginRequiredMixin, DetailView):
     model = AttemptedMailing
 
 
-class AttemptedMailingDetailView(DetailView):
-    model = AttemptedMailing
-
-
-class AttemptedMailingDeleteView(DeleteView):
+class AttemptedMailingDeleteView(LoginRequiredMixin, DeleteView):
     model = AttemptedMailing
     success_url = reverse_lazy("mailflow:attempts_list")
