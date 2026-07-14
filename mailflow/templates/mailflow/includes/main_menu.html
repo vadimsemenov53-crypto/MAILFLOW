@@ -22,17 +22,22 @@
                 </div>
             </form>
 
+            {% if user.is_manager %}
+                <a class="nav-link text-light mx-2" href="{% url 'users:list_users' %}">Пользователи</a>
 
-            {% if request.resolver_match.url_name == 'mailings_list' %}
-            <a class="nav-link text-light mx-2" href="{% url 'mailflow:mailings_create' %}">Добавить рассылку</a>
-            {% endif %}
+            {% elif user.is_authenticated %}
+                {% if request.resolver_match.url_name == 'mailings_list' %}
+                <a class="nav-link text-light mx-2" href="{% url 'mailflow:mailings_create' %}">Добавить рассылку</a>
+                {% endif %}
 
-            {% if request.resolver_match.url_name == 'recipients_list' %}
-            <a class="nav-link text-light mx-2" href="{% url 'mailflow:recipients_create' %}">Добавить получателя</a>
-            {% endif %}
+                {% if request.resolver_match.url_name == 'recipients_list' %}
+                <a class="nav-link text-light mx-2" href="{% url 'mailflow:recipients_create' %}">Добавить получателя</a>
+                {% endif %}
 
-            {% if request.resolver_match.url_name == 'message_list' %}
-            <a class="nav-link text-light mx-2" href="{% url 'mailflow:message_create' %}">Добавить сообщение</a>
+                {% if request.resolver_match.url_name == 'message_list' %}
+                <a class="nav-link text-light mx-2" href="{% url 'mailflow:message_create' %}">Добавить сообщение</a>
+                {% endif %}
+
             {% endif %}
 
             <!-- Основное меню -->

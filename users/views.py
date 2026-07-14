@@ -1,11 +1,13 @@
 import secrets
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import ListView
+from django.core.exceptions import PermissionDenied
 
 from config.settings import EMAIL_HOST_USER
 from users.forms import UserLoginForm, UserProfileForm, UserRegisterForm
@@ -17,6 +19,25 @@ from .models import User
 class UserLoginView(LoginView):
     template_name = "users/login.html"
     form_class = UserLoginForm
+
+
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin,  ListView):
+    model = User
+    permission_required = "users.view_user"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_manager:
+            raise PermissionDenied
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def get_queryset(self):
+        return User.objects.exclude(
+            groups__name="Managers"
+        ).exclude(
+            is_superuser=True
+        )
 
 
 class UserCreateView(CreateView):

@@ -65,6 +65,17 @@ class NewsLetterCreateView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+    def get_form(self, form_class=NewsLetterForm):
+        form = super().get_form(form_class)
+
+        form.fields['recipients'].queryset = (
+            NewsLetterRecipient.objects.filter(
+                creator=self.request.user
+            )
+        )
+
+        return form
+
 
 class NewsLetterDetailView(DetailView):
     model = NewsLetter
@@ -81,6 +92,17 @@ class NewsLetterUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("mailflow:mailings_detail", args=[self.kwargs.get("pk")])
+
+    def get_form(self, form_class=NewsLetterForm):
+        form = super().get_form(form_class)
+
+        form.fields['recipients'].queryset = (
+            NewsLetterRecipient.objects.filter(
+                creator=self.request.user
+            )
+        )
+
+        return form
 
 
 class NewsLetterDeleteView(LoginRequiredMixin, DeleteView):

@@ -4,7 +4,7 @@ from django.urls import path
 
 from users.apps import UsersConfig
 from users.forms import UserPasswordResetConfirmForm
-from users.views import UserCreateView, UserDetailView, UserLoginView, UserUpdateView, email_verification
+from users.views import UserCreateView, UserDetailView, UserLoginView, UserUpdateView, email_verification, UserListView
 
 app_name = UsersConfig.name
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path("email-confirm/<str:token>/", email_verification, name="email-confirm"),
     path("detail/", UserDetailView.as_view(), name="detail"),
     path("update/", UserUpdateView.as_view(), name="update"),
+    path("list_users/", UserListView.as_view(), name="list_users"),
     path(
         "password-reset/",
         PasswordResetView.as_view(
