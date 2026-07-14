@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.utils import timezone
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
 from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
@@ -117,6 +119,28 @@ class NewsLetterStartView(LoginRequiredMixin, View):
         send_newsletter(newsletter)
 
         return redirect('mailflow:mailings_detail', newsletter.pk)
+
+
+class NewsLetterStopView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        newsletter = get_object_or_404(NewsLetter, pk=pk)
+
+        if not (request.user.is_manager or newsletter.creator == self.request.user):
+            raise PermissionDenied
+
+        if newsletter.status == NewsLetter.ST_COMPLETED:
+            raise ValidationError("Рассылка уже завершена")
+
+        newsletter.time_stop = timezone.now()
+        newsletter.status = NewsLetter.ST_COMPLETED
+
+        newsletter.save(
+            update_fields=["time_stop", "status"]
+        )
+
+        return redirect("mailflow:mailings_list")
+
 
 
 class NewsLetterRecipientListView(ListView):

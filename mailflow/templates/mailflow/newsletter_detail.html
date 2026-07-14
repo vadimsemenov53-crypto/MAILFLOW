@@ -40,6 +40,15 @@
                                 <button type="submit" class="btn btn-primary">Запуск рассылки</button>
                             </div>
                         </form>
+
+                        <form method="post" action="{% url 'mailflow:mailings_stop' object.pk %}">
+                            {% csrf_token %}
+
+                            <button onclick="return confirm('Остановить рассылку?')" type="submit" class="btn btn-danger">
+                                Остановить рассылку
+                            </button>
+
+                        </form>
                     </div>
                 </div>
             </div>
