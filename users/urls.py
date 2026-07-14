@@ -4,7 +4,16 @@ from django.urls import path
 
 from users.apps import UsersConfig
 from users.forms import UserPasswordResetConfirmForm
-from users.views import UserCreateView, UserDetailView, UserLoginView, UserUpdateView, email_verification, UserListView
+from users.views import (
+    UserCreateView,
+    UserDetailView,
+    UserLoginView,
+    UserUpdateView,
+    email_verification,
+    UserListView,
+    UserBlockView,
+    UserUnBlockView
+)
 
 app_name = UsersConfig.name
 
@@ -16,6 +25,9 @@ urlpatterns = [
     path("detail/", UserDetailView.as_view(), name="detail"),
     path("update/", UserUpdateView.as_view(), name="update"),
     path("list_users/", UserListView.as_view(), name="list_users"),
+    path("users/<int:pk>/block/", UserBlockView.as_view(), name="user_block"),
+    path("users/<int:pk>/unblock/", UserUnBlockView.as_view(), name="user_unblock"),
+
     path(
         "password-reset/",
         PasswordResetView.as_view(
@@ -25,6 +37,7 @@ urlpatterns = [
         ),
         name="password_reset",
     ),
+
     path(
         "password-reset/done/",
         PasswordResetDoneView.as_view(
@@ -32,6 +45,7 @@ urlpatterns = [
         ),
         name="password_reset_done",
     ),
+
     path(
         "password-reset-confirm/<uidb64>/<token>/",
         PasswordResetConfirmView.as_view(
@@ -41,6 +55,7 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
+
     path(
         "password-reset/complete/",
         PasswordResetCompleteView.as_view(

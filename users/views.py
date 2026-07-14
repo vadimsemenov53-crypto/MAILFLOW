@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, View
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
 
@@ -38,6 +38,44 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin,  ListView):
         ).exclude(
             is_superuser=True
         )
+
+
+class UserBlockView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        if not request.user.is_manager:
+            raise PermissionDenied
+
+        user = get_object_or_404(User, pk=pk)
+
+        if user == request.user:
+            raise PermissionDenied
+
+        if user.is_manager:
+            raise PermissionDenied
+
+        user.is_active = False
+        user.save()
+
+        return redirect("users:list_users")
+
+
+class UserUnBlockView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        if not request.user.is_manager:
+            raise PermissionDenied
+
+        user = get_object_or_404(User, pk=pk)
+
+        if user == request.user:
+            raise PermissionDenied
+
+        if user.is_manager:
+            raise PermissionDenied
+
+        user.is_active = True
+        user.save()
+
+        return redirect("users:list_users")
 
 
 class UserCreateView(CreateView):
