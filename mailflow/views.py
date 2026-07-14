@@ -11,6 +11,7 @@ from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRec
 from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
 
 from mailflow.services import send_newsletter
+from mailflow.services import MailFlowService
 
 
 class MainView(TemplateView):
@@ -26,21 +27,14 @@ class MainView(TemplateView):
             return context
 
         user = self.request.user
-        newsletters = NewsLetter.objects.filter(creator=user)
 
-        context["total_mailings"] = newsletters.count()
+        MailFlowService.update_newsletters_status(user)
 
-        for newsletter in newsletters:
-            newsletter.update_status()
+        context["total_mailings"] = MailFlowService.get_newsletter_count_cache(user)
 
-        context["active_mailings"] = AttemptedMailing.objects.filter(
-            newsletter__creator=user,
-            status=AttemptedMailing.ST_SUCCESS
-        ).count()
+        context["active_mailings"] = MailFlowService.get_active_newsletters_count_cache(user)
 
-        context["total_recipients"] = NewsLetterRecipient.objects.filter(
-            creator=user,
-        ).count()
+        context["total_recipients"] = MailFlowService.get_recipients_count_cache(user)
 
         return context
 
