@@ -8,6 +8,8 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, View
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from config.settings import EMAIL_HOST_USER
 from users.forms import UserLoginForm, UserProfileForm, UserRegisterForm
@@ -120,6 +122,7 @@ def email_verification(request, token):
     return redirect(reverse("users:login"))
 
 
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "users/user_detail.html"

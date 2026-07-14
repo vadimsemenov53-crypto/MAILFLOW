@@ -4,13 +4,15 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from mailflow.models import AttemptedMailing, Message, NewsLetter, NewsLetterRecipient
 from mailflow.forms import NewsLetterForm, NewsLetterRecipientForm, MessageForm
 
 from mailflow.services import send_newsletter
 
-# Create your views here.
+
 class MainView(TemplateView):
     template_name = 'mailflow/main.html'
 
@@ -79,6 +81,7 @@ class NewsLetterCreateView(LoginRequiredMixin, CreateView):
         return form
 
 
+@method_decorator(cache_page(60), name='dispatch')
 class NewsLetterDetailView(DetailView):
     model = NewsLetter
 
@@ -143,6 +146,7 @@ class NewsLetterStopView(LoginRequiredMixin, View):
 
 
 
+@method_decorator(cache_page(60), name='dispatch')
 class NewsLetterRecipientListView(ListView):
     model = NewsLetterRecipient
 
@@ -179,11 +183,13 @@ class NewsLetterRecipientUpdateView(LoginRequiredMixin, UpdateView):
         return reverse("mailflow:recipients_detail", args=[self.kwargs.get("pk")])
 
 
+@method_decorator(cache_page(60), name='dispatch')
 class NewsLetterRecipientDeleteView(LoginRequiredMixin, DeleteView):
     model = NewsLetterRecipient
     success_url = reverse_lazy("mailflow:recipients_list")
 
 
+@method_decorator(cache_page(60), name='dispatch')
 class MessageListView(ListView):
     model = Message
 
@@ -208,6 +214,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class MessageDetailView(DetailView):
     model = Message
 
