@@ -89,6 +89,11 @@ class NewsLetterUpdateView(LoginRequiredMixin, UpdateView):
     model = NewsLetter
     form_class = NewsLetterForm
 
+    def get_queryset(self):
+        return NewsLetter.objects.filter(
+            creator=self.request.user
+        )
+
     def get_success_url(self):
         return reverse("mailflow:mailings_detail", args=[self.kwargs.get("pk")])
 
@@ -107,6 +112,11 @@ class NewsLetterUpdateView(LoginRequiredMixin, UpdateView):
 class NewsLetterDeleteView(LoginRequiredMixin, DeleteView):
     model = NewsLetter
     success_url = reverse_lazy("mailflow:mailings_list")
+
+    def get_queryset(self):
+        return NewsLetter.objects.filter(
+            creator=self.request.user
+        )
 
 
 class NewsLetterStartView(LoginRequiredMixin, View):
@@ -173,6 +183,11 @@ class NewsLetterRecipientUpdateView(LoginRequiredMixin, UpdateView):
     model = NewsLetterRecipient
     form_class = NewsLetterRecipientForm
 
+    def get_queryset(self):
+        return NewsLetterRecipient.objects.filter(
+            creator=self.request.user
+        )
+
     def get_success_url(self):
         return reverse("mailflow:recipients_detail", args=[self.kwargs.get("pk")])
 
@@ -181,6 +196,11 @@ class NewsLetterRecipientUpdateView(LoginRequiredMixin, UpdateView):
 class NewsLetterRecipientDeleteView(LoginRequiredMixin, DeleteView):
     model = NewsLetterRecipient
     success_url = reverse_lazy("mailflow:recipients_list")
+
+    def get_queryset(self):
+        return NewsLetterRecipient.objects.filter(
+            creator=self.request.user
+        )
 
 
 @method_decorator(cache_page(60), name='dispatch')
@@ -217,6 +237,11 @@ class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
 
+    def get_queryset(self):
+        return Message.objects.filter(
+            creator=self.request.user
+        )
+
     def get_success_url(self):
         return reverse("mailflow:message_detail", args=[self.kwargs.get("pk")])
 
@@ -224,6 +249,11 @@ class MessageUpdateView(LoginRequiredMixin, UpdateView):
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
     model = Message
     success_url = reverse_lazy("mailflow:message_list")
+
+    def get_queryset(self):
+        return Message.objects.filter(
+            creator=self.request.user
+        )
 
 
 class AttemptedMailingListView(LoginRequiredMixin, ListView):
@@ -243,3 +273,8 @@ class AttemptedMailingDetailView(LoginRequiredMixin, DetailView):
 class AttemptedMailingDeleteView(LoginRequiredMixin, DeleteView):
     model = AttemptedMailing
     success_url = reverse_lazy("mailflow:attempts_list")
+
+    def get_queryset(self):
+        return AttemptedMailing.objects.filter(
+            newsletter__creator=self.request.user
+        )

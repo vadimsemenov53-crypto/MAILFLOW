@@ -24,10 +24,14 @@
                                 <a class="btn btn-primary" href="{% url 'mailflow:message_detail' message.pk %}" role="button">
                                     Посмотреть
                                 </a>
+
+                                {% if message.creator == user %}
                                 <a class="btn btn-secondary" href="{% url 'mailflow:message_update' message.pk %}" role="button">
                                     Редактировать
                                 </a>
                                 <a class="btn btn-danger" href="{% url 'mailflow:message_delete' message.pk %}" role="button">Удалить</a>
+                                {% endif %}
+
                             </div>
                         </div>
                     </div>

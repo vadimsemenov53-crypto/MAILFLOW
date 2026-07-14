@@ -24,7 +24,10 @@
                                 <a class="btn btn-primary" href="{% url 'mailflow:attempts_detail' attempt.pk %}" role="button">
                                     Посмотреть
                                 </a>
+
+                                {% if attempt.newsletter.creator == user %}
                                 <a class="btn btn-danger" href="{% url 'mailflow:attempts_delete' attempt.pk %}" role="button">Удалить</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
