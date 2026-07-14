@@ -13,6 +13,11 @@
                     <div class="card-body">
                         <p class="card-text">ФИО: {{ recipient.full_name }}</p>
                         <p class="card-text">Email: {{ recipient.email }}</p>
+
+                        {% if user.is_manager %}
+                        <p class="card-text">Создал: {{ recipient.creator}}</p>
+                        {% endif %}
+
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'mailflow:recipients_detail' recipient.pk %}" role="button">

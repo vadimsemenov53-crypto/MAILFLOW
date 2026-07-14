@@ -36,3 +36,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+    @property
+    def is_manager(user):
+        """ Функция проверяет, является ли пользователь менеджером. """
+        return user.groups.filter(name='Managers').exists()

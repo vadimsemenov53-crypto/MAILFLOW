@@ -46,6 +46,9 @@ class NewsLetterListView(ListView):
     model = NewsLetter
 
     def get_queryset(self):
+        if self.request.user.is_manager or self.request.user.is_superuser:
+            return NewsLetter.objects.all()
+
         return NewsLetter.objects.filter(creator=self.request.user)
 
 
@@ -98,6 +101,9 @@ class NewsLetterRecipientListView(ListView):
     model = NewsLetterRecipient
 
     def get_queryset(self):
+        if self.request.user.is_manager or self.request.user.is_superuser:
+            return NewsLetterRecipient.objects.all()
+
         return NewsLetterRecipient.objects.filter(creator=self.request.user)
 
 
@@ -136,6 +142,9 @@ class MessageListView(ListView):
     model = Message
 
     def get_queryset(self):
+        if self.request.user.is_manager or self.request.user.is_superuser:
+            return Message.objects.all()
+
         return Message.objects.filter(creator=self.request.user)
 
 
@@ -174,6 +183,9 @@ class AttemptedMailingListView(LoginRequiredMixin, ListView):
     model = AttemptedMailing
 
     def get_queryset(self):
+        if self.request.user.is_manager or self.request.user.is_superuser:
+            return AttemptedMailing.objects.all()
+
         return AttemptedMailing.objects.filter(newsletter__creator=self.request.user)
 
 

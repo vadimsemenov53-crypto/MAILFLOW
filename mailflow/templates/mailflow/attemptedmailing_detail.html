@@ -12,6 +12,11 @@
                     <p class="card-text">Ответ сервера: {{ object.response_server }}</p>
                     <p class="card-text">Получатель: {{ object.recipient }}</p>
 
+
+                    {% if user.is_manager %}
+                    <p class="card-text">Создал: {{ object.newsletter.creator}}</p>
+                    {% endif %}
+
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a class="btn btn-primary" href="{% url 'mailflow:attempts_list' %}" role="button">

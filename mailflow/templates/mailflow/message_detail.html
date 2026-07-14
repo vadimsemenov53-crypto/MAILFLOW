@@ -9,6 +9,11 @@
                     <p class="card-text">Название: {{ object.subject }}</p>
                     <p class="card-text">Сообщение: {{ object.body }}</p>
                     <p class="card-text">Дата создания: {{ object.created_at }}</p>
+
+                    {% if user.is_manager %}
+                    <p class="card-text">Создал: {{ object.creator}}</p>
+                    {% endif %}
+
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a class="btn btn-primary" href="{% url 'mailflow:message_list' %}" role="button">

@@ -14,6 +14,11 @@
                         <p class="card-text">Тема: {{ message.subject }}</p>
                         <p class="card-text">Тело письма: {{ message.body | truncatechars:30 }}</p>
                         <p class="card-text">Дата создания: {{ message.created_at }}</p>
+
+                        {% if user.is_manager %}
+                        <p class="card-text">Создал: {{ message.creator}}</p>
+                        {% endif %}
+
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'mailflow:message_detail' message.pk %}" role="button">

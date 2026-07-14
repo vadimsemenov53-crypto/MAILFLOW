@@ -16,6 +16,11 @@
                         <p class="card-text">Начало: {{ newsletter.time_start }}</p>
                         <p class="card-text">Конец: {{ newsletter.time_stop }}</p>
                         <p class="card-text">Дата создания: {{ newsletter.created_at }}</p>
+
+                        {% if user.is_manager %}
+                        <p class="card-text">Создал: {{ newsletter.creator}}</p>
+                        {% endif %}
+
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'mailflow:mailings_detail' newsletter.pk %}" role="button">
