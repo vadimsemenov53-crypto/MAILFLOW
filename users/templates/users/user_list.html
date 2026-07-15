@@ -1,0 +1,56 @@
+{% extends "mailflow/base.html" %}
+
+{% block content %}
+
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            {% for user in object_list %}
+
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" class="img-fluid">
+                        {% endif %}
+                        <p class="card-text">Email: {{ user.email }}</p>
+                        <p class="card-text">Телефон: {{ user.phone }}</p>
+                        <p class="card-text">Страна: {{ user.country }}</p>
+                        <p class="card-text">Активный: {{ user.is_active }}</p>
+
+
+
+                        {% if user.is_active %}
+                        <form method="post" action="{% url 'users:user_block' user.pk %}">
+                            {% csrf_token %}
+
+                            <button onclick="return confirm('Заблокировать пользователя?')" type="submit" class="btn btn-danger">
+                                Заблокировать
+                            </button>
+
+                        </form>
+
+                        {% else %}
+                        <form method="post" action="{% url 'users:user_unblock' user.pk %}">
+                            {% csrf_token %}
+
+                            <button onclick="return confirm('Разблокировать пользователя?')" type="submit" class="btn btn-primary">
+                                Разблокировать
+                            </button>
+
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
