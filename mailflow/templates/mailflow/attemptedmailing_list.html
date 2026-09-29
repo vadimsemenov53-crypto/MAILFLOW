@@ -1,0 +1,44 @@
+{% extends "mailflow/base.html" %}
+
+{% block content %}
+
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            {% for attempt in object_list %}
+
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">Статус: {{ attempt.get_status_display }}</p>
+                        <p class="card-text">Рассылка: {{ attempt.newsletter }}</p>
+                        <p class="card-text">Ответ: {{ attempt.response_server | truncatechars:30 }}</p>
+
+                        {% if user.is_manager %}
+                        <p class="card-text">Создал: {{ attempt.newsletter.creator}}</p>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a class="btn btn-primary" href="{% url 'mailflow:attempts_detail' attempt.pk %}" role="button">
+                                    Посмотреть
+                                </a>
+
+                                {% if attempt.newsletter.creator == user %}
+                                <a class="btn btn-danger" href="{% url 'mailflow:attempts_delete' attempt.pk %}" role="button">Удалить</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
